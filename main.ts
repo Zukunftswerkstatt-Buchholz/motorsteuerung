@@ -6,7 +6,7 @@
  * Hinweis: Drehrichtung ggf. durch Tauschen von ++/-- im ISR anpassen.
  */
 
-//% color=#FF6F00 icon="\uf085" block="Motorsteuerung"
+//% color=#FF6F00 icon="\uf085" block="Motor"
 //% groups='["Einfach", "Pro"]'
 namespace Motorsteuerung {
     // ---------- Pinbelegung (dein Original, unverändert in der Logik) ----------
@@ -353,8 +353,9 @@ namespace Motorsteuerung {
     /**
      * Initialisiert Treiber, Encoder und startet die Regelschleife.
      */
-    //% block="Starten"
+    //% block="Initialisieren"
     //% group="Einfach"
+    //% weight=10
     export function begin() {
         if (_started) return
         _started = true
@@ -370,11 +371,13 @@ namespace Motorsteuerung {
 
 
     /**
-     * Mit konstanter Drehzahl fahren.
+     * Mit konstanter Drehzahl drehen.
      */
-    //% block="drehe %motor mit %rpm RPM %richtung"
+    //% block="drehe %motor mit %rpm RPM in Richtung %richtung"
     //% group="Einfach"
     //% turns.defl=1
+    //% rpm.min=0 rpm.defl=20 rpm.max=90
+    //% weight=80
     export function drive(motor: Motor, richtung: RichtungEinfach, rpm: number) {
         const dir = (richtung as number) | 0; // +1/-1
         if (motor == Motor.Links) {
@@ -388,38 +391,43 @@ namespace Motorsteuerung {
     }
 
     /**
+     * Mit konstanter Drehzahl fahren.
+     */
+    //% block="fahre %richtung mit %rpm RPM"
+    //% group="Einfach"
+    //% milliSeconds.defl=1000
+    //% rpm.min=0 rpm.defl=20 rpm.max=90
+    //% weight=100
+    export function driveBoth(richtung: RichtungEinfach, rpm: number) {
+        const dir = (richtung as number) | 0; // +1/-1
+        setSpeedRPM_A(dir * rpm)
+        setSpeedRPM_B(dir * rpm)
+    }
+
+    /**
      * Mit konstanter Drehzahl fahren für bestimmte Zeit.
      */
-    //% block="drehe %motor mit %rpm RPM für %seconds Millisekunden"
+    //% block="fahre %richtung mit %rpm RPM für %milliSeconds Millisekunden"
     //% group="Einfach"
-    //% turns.defl=1
-    export function driveSeconds(motor: Motor, richtung: RichtungEinfach, rpm: number, milliSeconds: number) {
+    //% milliSeconds.defl=1000
+    //% rpm.min=0 rpm.defl=20 rpm.max=90
+    //% weight=90
+    export function driveMilliSeconds(richtung: RichtungEinfach, rpm: number, milliSeconds: number) {
         const dir = (richtung as number) | 0; // +1/-1
-        if (motor == Motor.Links) {
-            setSpeedRPM_A(dir * rpm)
-        } else if (motor == Motor.Rechts) {
-            setSpeedRPM_B(dir * rpm)
-        } else {
-            setSpeedRPM_A(dir * rpm)
-            setSpeedRPM_B(dir * rpm)
-        }
+        setSpeedRPM_A(dir * rpm)
+        setSpeedRPM_B(dir * rpm)
         basic.pause(milliSeconds)
-        if (motor == Motor.Links) {
-            setSpeedRPM_A(0)
-        } else if (motor == Motor.Rechts) {
-            setSpeedRPM_B(0)
-        } else {
-            setSpeedRPM_A(0)
-            setSpeedRPM_B(0)
-        }
+        setSpeedRPM_A(0)
+        setSpeedRPM_B(0)
     }
 
     /**
      * Drehe Motor LINKS/RECHTS/BEIDE um Umdrehungen.
      */
-    //% block="drehe %motor %richtung für %turns Umdrehungen"
+    //% block="drehe %motor %richtung um %turns Umdrehungen"
     //% group="Einfach"
     //% turns.min=0 turns.defl=1
+    //% weight=60
     export function rotateSimple(motor: Motor, richtung: RichtungEinfach, turns: number) {
         const dir = (richtung as number) | 0; // +1/-1
         if (motor == Motor.Links) {
@@ -436,7 +444,8 @@ namespace Motorsteuerung {
      */
     //% block="drehe auf der Stelle nach %richtung für %turns Umdrehungen"
     //% group="Einfach"
-    //% turns.defl=1
+    //% turns.min=0 turns.defl=1
+    //% weight=70
     export function rotateOnSpotSimple(richtung: RichtungDrehung, turns: number) {
         const dir = (richtung as number) | 0; // +1/-1
         rotate(turns, dir, 10, 7)
