@@ -50,8 +50,8 @@ Motorsteuerung.begin()
 // Einfach: 1,5 Umdrehungen LINKS vorwärts
 Motorsteuerung.rotateSimple(Motorsteuerung.Motor.Links, Motorsteuerung.RichtungEinfach.Vorwaerts, 1.5)
 
-// Einfach: auf der Stelle 0,25 Umdrehungen rückwärts (also gegen den Uhrzeigersinn)
-Motorsteuerung.rotateOnSpotSimple(Motorsteuerung.RichtungEinfach.Rueckwaerts, 0.25)
+// Einfach: auf der Stelle 0,25 Umdrehungen nach Links (also gegen den Uhrzeigersinn)
+Motorsteuerung.rotateOnSpotSimple(Motorsteuerung.RichtungEinfach.Links, 0.25)
 
 // Pro: Drehzahl LINKS = +60 RPM, RECHTS = -60 RPM (gegensinnig)
 Motorsteuerung.setRPM_Pro(Motorsteuerung.Motor.Links, 60)
