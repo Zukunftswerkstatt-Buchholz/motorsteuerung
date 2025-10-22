@@ -20,7 +20,7 @@ Optimiert für **Calliope mini v3** und getestete N20-Encoder (DFRobot, 120:1, ~
 
 ### Treiber / Motoren (DRV8833)
 
-| Motor | DRV8833 IN1 | DRV8833 IN2 | Calliope-Pin |
+| Motor | + | - | Calliope-Pin |
 |---|---|---|---|
 | **Links** | AIN1 | AIN2 | **P1** (PWM), **P0** (PWM) |
 | **Rechts** | BIN1 | BIN2 | **P3** (PWM), **P2** (PWM) |
